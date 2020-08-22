@@ -4,6 +4,8 @@ Unity 3D Event system that uses the new Experimental Unity GraphView (https://do
 REQUIRED COMPONENT - Will Not Compile without Odin Inspector!:
 https://odininspector.com/
 
+NOTE - Graph will not be operational until an Event has been added.
+
 ### Details
 I love Event Driven Architectures (EDA). It makes for nice, decoupled code. But I am not a fan of how ambiguous the relationships between scripts can be. Enter Tranzmit, a fully functional, object based (send anything!) event system... with a twist!
 
