@@ -33,5 +33,7 @@ Additional info will be made available at https://blep.io
 
 Overview video on YouTube: https://youtu.be/BfAUmtgjHac
 
+Odin Inspector Community Tools: https://odininspector.com/community-tools/58C/tranzmit-an-event-system-with-visual-feedback-and-multi-level-error-checking
+
 ![Image of Trazmit Components](https://blep.io/wp-content/uploads/2020/07/Trazmit-Main.png)
 ![Image of Trazmit GraphView](https://blep.io/wp-content/uploads/2020/07/Trazmit-Graph.png)
