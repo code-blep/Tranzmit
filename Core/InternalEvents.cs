@@ -45,19 +45,19 @@ namespace Blep.Tranzmit
 
         // -----------------------------------------------------------------------------------------
 
-        public delegate void EventSentDelegate(object source, DeliveryStatuses status, List<Errors> errorTypes, EventNames eventName, Type requiredDataType, Type providedDataType, EventData.TranzmitDelegate tranzmitDelegate);
+        public delegate void EventSentDelegate(object payload, object source, DeliveryStatuses status, List<Errors> errorTypes, EventNames eventName, Type requiredDataType, Type providedDataType, EventData.TranzmitDelegate tranzmitDelegate);
         public event EventSentDelegate EventSent;
 
         /// <summary>
         /// Called when an Event has been sent by an Object via Tranzmit. The information here will provide an insight into whether the send was successful or not. 
         /// </summary>
         /// <param name="eventName">The name of the Event sent.</param>
-        public void Broadcast_Event_Sent(object source, DeliveryStatuses status, List<Errors> errors, EventNames eventName, Type requiredDataType, Type providedDataType, EventData.TranzmitDelegate tranzmitDelegate)
+        public void Broadcast_Event_Sent(object payload, object source, DeliveryStatuses status, List<Errors> errors, EventNames eventName, Type requiredDataType, Type providedDataType, EventData.TranzmitDelegate tranzmitDelegate)
         {
             // Subscribers?
             if (tranzmitDelegate != null && EventSent != null)
             {
-                EventSent(source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
+                EventSent(payload, source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
             }
         }
 

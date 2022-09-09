@@ -167,10 +167,10 @@ namespace Blep.Tranzmit.Demo
                 EventsSentUI.Total++;
             }
 
-            var data = (float)payload;
+            var data = (int)payload;
 
             if (Silent == false)
-                Output += "\n\n" + this.GetType().Name + "\n" + data;
+                Output += "\n\n" + GetType().Name + "\n" + data;
         }
 
         // -----------------------------------------------------------------------------------------

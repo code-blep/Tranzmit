@@ -33,6 +33,7 @@ namespace Blep.Tranzmit
         /// </summary>
         public enum DeliveryStatuses
         {
+            None,
             Success,
             Failed
         }
@@ -42,10 +43,10 @@ namespace Blep.Tranzmit
         /// </summary>
         public enum Errors
         {
+            None,
             MissingSource,
             NoSubscribers,
             MissingPayload,
-            MissingDataType,
             WrongDataType
         }
 
@@ -122,9 +123,6 @@ namespace Blep.Tranzmit
                         Errors.Add(Tranzmit.Errors.WrongDataType);
                 }
 
-                if(dataType == null)
-                    Errors.Add(Tranzmit.Errors.MissingDataType);
-
                 DeliveryStatuses delieveryStatus;
 
                 if (Errors.Count == 0)
@@ -141,7 +139,7 @@ namespace Blep.Tranzmit
                     TranzmitEvent.Invoke(source, payload);
                 }
 
-                Info.Tranzmit.Broadcast_Event_Sent(source, delieveryStatus, Errors, Info.EventName, Info.DataType, dataType, TranzmitEvent);
+                Info.Tranzmit.Broadcast_Event_Sent(payload, source, delieveryStatus, Errors, Info.EventName, Info.DataType, dataType, TranzmitEvent);
             }
 
             /// <summary>
@@ -200,17 +198,37 @@ namespace Blep.Tranzmit
             /// <returns>Event Delegates</returns>
             public List<Delegate> GetSubscribers()
             {
-                List<Delegate> subscribers = new List<Delegate>();
-                
+               
                 if (TranzmitEvent != null)
                 {
-                    foreach (Delegate subscriber in TranzmitEvent.GetInvocationList())
-                    {
-                        subscribers.Add(subscriber);
-                    }
+                    return TranzmitEvent.GetInvocationList().ToList();
                 }
 
-                return subscribers;
+                return new List<Delegate>();
+            }
+            
+            /// <summary>
+            /// Experimental. Work in progress. Not Complete. Exploring removal of Invocation (subscriber) that have a NULL target.
+            /// Would consider using as first step in Send();
+            /// </summary>
+            public void RemoveInvocationWithoutTarget()
+            {
+                if (TranzmitEvent != null)
+                {
+                    var subscribers = TranzmitEvent.GetInvocationList();
+
+                    if (subscribers != null)
+                    {
+                        foreach (var invocation in TranzmitEvent.GetInvocationList())
+                        {
+                            if (invocation.Target == null)
+                            {
+                                // How to remove a Subscriber from Delegate with no Target? Is it possible?
+                                // TranzmitEvent -= delegate(object source, object payload) {  };
+                            }
+                        }
+                    }
+                }
             }
         }
 

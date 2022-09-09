@@ -9,10 +9,10 @@ namespace Blep.Tranzmit
 {
     /// <summary>
     /// Used for testing and general debugging.
-    /// This script is not designed for use when stress testing / checking for GC, and it is recommened to remove for correct results in Profiler.
+    /// This script is not designed for use when stress testing / checking for GC, and it is recommended to remove for correct results in Profiler.
     /// It is a verbose tool that may generate GC, although I have tried to make it as friendly to GC as I can in practical terms. 
     /// 
-    /// Event grouping order is: [SUCCSESS or FAILED][EVENT NAME][ERROR LIST][BROADCASTERS && SUBSCRIBERS]
+    /// Event grouping order is: [SUCCESS or FAILED][EVENT NAME][ERROR LIST][BROADCASTERS && SUBSCRIBERS]
     /// 
     /// </summary>
 
@@ -21,7 +21,7 @@ namespace Blep.Tranzmit
     {
         [Required]
         public Tranzmit Tranzmit;
-
+        
         [FoldoutGroup("Events")]
         [ReadOnly]
         public Dictionary<Tranzmit.EventNames, List<LogEntry>> Success = new Dictionary<Tranzmit.EventNames, List<LogEntry>>();
@@ -85,7 +85,7 @@ namespace Blep.Tranzmit
         // -----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// You might have noticed that I am using in-built Events to subscribe to Tranzmit, rather than using Tranzmit to handle them. There are multiple reasons inclduding:
+        /// You might have noticed that I am using in-built Events to subscribe to Tranzmit, rather than using Tranzmit to handle them. There are multiple reasons including:
         /// - If Tranzmit breaks, the debugger has a chance of also failing. The number of events are minimal and easy to handle, so no biggy.
         /// - Reduces clutter in Tranzmit Events for the end user, so only their Events will be present.
         /// </summary>
@@ -158,7 +158,7 @@ namespace Blep.Tranzmit
 
         /// <summary>
         /// A built-in Tranzmit Event sent by Tranzmit when an Event has been removed from the Tranzmit Events Dictionary.
-        /// When recieved, Tranzmit Debug will auto remove an debug data associated with the Event Name.
+        /// When received, Tranzmit Debug will auto remove an debug data associated with the Event Name.
         /// </summary>
         /// <param name="eventName">The name of the event that was removed from Tranzmit.Events</param>
         public void EventDeleted(Tranzmit.EventNames eventName)
@@ -170,8 +170,8 @@ namespace Blep.Tranzmit
         // -----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// The business end of Tranzmit Debug. When Tranzmit ATTEMPTS to send an event, it also broadacasts information about it. This is sent regadless of whether the requested Tranzmit Event was valid and sent. 
-        /// It creates and saves the associated data. Notice that we store the button information in here. This allows for more eficient updating of the Graphview.
+        /// The business end of Tranzmit Debug. When Tranzmit ATTEMPTS to send an event, it also broadcasts information about it. This is sent regardless of whether the requested Tranzmit Event was valid and sent. 
+        /// It creates and saves the associated data. Notice that we store the button information in here. This allows for more efficient updating of the Graphview.
         /// </summary>
         /// <param name="source">The object that requested for a Tranzmit event to be sent. Can be Null</param>
         /// <param name="status">A basic 'Success' or 'Failed' output.</param>
@@ -180,12 +180,12 @@ namespace Blep.Tranzmit
         /// <param name="requiredDataType">The data type specified by the user when they configured the Tranzmit Event.</param>
         /// <param name="providedDataType">The type of data the user actually attached to the event. Can be Null.</param>
         /// <param name="tranzmitDelegate">The Event/Delegate of the Tranzmit Event.</param>
-        public void EventSent(object source, Tranzmit.DeliveryStatuses status, List<Tranzmit.Errors> errors, Tranzmit.EventNames eventName, Type requiredDataType, Type providedDataType, Tranzmit.EventData.TranzmitDelegate tranzmitDelegate)
+        public void EventSent(object payload, object source, Tranzmit.DeliveryStatuses status, List<Tranzmit.Errors> errors, Tranzmit.EventNames eventName, Type requiredDataType, Type providedDataType, Tranzmit.EventData.TranzmitDelegate tranzmitDelegate)
         {
             // This will be assigned to later on, and allows for cleaner code and less if statements etc
             Dictionary<Tranzmit.EventNames, List<LogEntry>> saveLocation = null;
 
-            // Allocate the Dicitonary to use
+            // Allocate the Dictionary to use
             if (status == Tranzmit.DeliveryStatuses.Success)
             {
                 saveLocation = Success;
@@ -202,11 +202,13 @@ namespace Blep.Tranzmit
                 source = NullSourceObject;
             }
 
+            LogEntry newLogEntry = new LogEntry();
+            
             // CREATE NEW EVENT LOGS FIRST - WILL APPLY TOTAL TO SUBSCRIBERS AND BROADCASTERS AFTER (BELOW)
             // NEW ENTRY INTO LIST - AS EVENT NAME NOT FOUND
             if (!saveLocation.ContainsKey(eventName))
             {
-                var newLogEntry = GenerateLogEntry(source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
+                newLogEntry = GenerateLogEntry(source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
                 saveLocation.Add(eventName, new List<LogEntry>() { newLogEntry });
 
                 Tranzmit.Broadcast_Tranzmit_Log_Update(newLogEntry);
@@ -219,7 +221,7 @@ namespace Blep.Tranzmit
                 // NEW ERRORS LIST
                 if (foundLog == null)
                 {
-                    var newLogEntry = GenerateLogEntry(source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
+                    newLogEntry = GenerateLogEntry(source, status, errors, eventName, requiredDataType, providedDataType, tranzmitDelegate);
                     saveLocation[eventName].Add(newLogEntry);
                     Tranzmit.Broadcast_Tranzmit_Log_Update(newLogEntry);
                 }
@@ -273,7 +275,6 @@ namespace Blep.Tranzmit
             }
         }
 
-
         // -----------------------------------------------------------------------------------------
 
         /// <summary>
@@ -325,7 +326,7 @@ namespace Blep.Tranzmit
 
             if(found.Count > 1)
             {
-                Debug.LogError($"DEFENSIVE WARNING: More than 1 match when searching for matching Errors List were found! This should not have happened. Returing first entry in list!");
+                Debug.LogError($"DEFENSIVE WARNING: More than 1 match when searching for matching Errors List were found! This should not have happened. Returning first entry in list!");
             }
             
             if(found.Count > 0)
@@ -341,7 +342,7 @@ namespace Blep.Tranzmit
         // -----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Used for when an Event has been removed from the EventNames Enums, and is called by a subscriber to Tranzmit buil-in event system.
+        /// Used for when an Event has been removed from the EventNames Enums, and is called by a subscriber to Tranzmit built-in event system.
         /// </summary>
         public void Remove_Debug_Data_For_Deleted_Event_Type_ENUM()
         {
@@ -365,7 +366,7 @@ namespace Blep.Tranzmit
         // -----------------------------------------------------------------------------------------
 
         /// <summary>
-        /// Used for when an Event has been removed from the Tranzmit Events Dictionary, and is called by a subscriber to Tranzmit buil-in event system.
+        /// Used for when an Event has been removed from the Tranzmit Events Dictionary, and is called by a subscriber to Tranzmit built-in event system.
         /// </summary>
         public void Remove_Debug_Data_For_Deleted_Event_Type_In_TRANZMIT()
         {

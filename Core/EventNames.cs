@@ -33,11 +33,15 @@
         /// 
         /// 
         /// </summary>
+
+        // ALSO CONSIDERING TURNING THIS INTO A LIST WITH HELPER FUNCTION
+        
         public enum EventNames
         {
-            PlayerStats = 0,
-            Damage = 1,
-            SecretFound = 2
+            None = 0,
+            PlayerStats = 1,
+            Damage = 2,
+            SecretFound = 3
         }
     }
 }
