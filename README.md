@@ -44,3 +44,4 @@ Odin Inspector Community Tools: https://odininspector.com/community-tools/58C/tr
 
 ![Image of Trazmit Components](https://blep.io/media/pages/products/tranzmit/65f014f032-1655641493/trazmit-main.png)
 ![Image of Trazmit GraphView](https://blep.io/media/pages/products/tranzmit/f036424651-1655664696/trazmit-graph.png)
+![Image of Trazmit Debug V2 UI](https://blep.io/media/pages/products/tranzmit/9f1710a2c4-1662752511/tranzmit-debug-v2-ui.png)
