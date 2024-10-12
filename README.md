@@ -9,7 +9,6 @@ NOTE - Graph will not be operational until an Event has been added.
 ### Releases
 * V1 - Tranzmit Core, and Debug V1 that works with Unity Graphview API based debug visualization
 * V2 - Minor Tweaks to Tranzmit Core, new Debug V2 (V1 is still included) with a Unity UI based debug visualization to go with it.
-  * Update video is coming soon!
 
 ### Details
 I love Event Driven Architectures (EDA). It makes for nice, decoupled code. But I am not a fan of how ambiguous the relationships between scripts can be. Enter Tranzmit, a fully functional, object based (send anything!) event system... with a twist!
@@ -42,6 +41,6 @@ Overview video on YouTube: https://youtu.be/BfAUmtgjHac
 
 Odin Inspector Community Tools: https://odininspector.com/community-tools/58C/tranzmit-an-event-system-with-visual-feedback-and-multi-level-error-checking
 
-![Image of Trazmit Components](https://blep.io/media/pages/products/tranzmit/65f014f032-1655641493/trazmit-main.png)
-![Image of Trazmit GraphView](https://blep.io/media/pages/products/tranzmit/f036424651-1655664696/trazmit-graph.png)
-![Image of Trazmit Debug V2 UI](https://blep.io/media/pages/products/tranzmit/9f1710a2c4-1662752511/tranzmit-debug-v2-ui.png)
+![Image of Trazmit Components](Images/trazmit-main.png)
+![Image of Trazmit GraphView](Images/trazmit-graph.png)
+![Image of Trazmit Debug V2 UI](Images/tranzmit-debug-v2-ui.png)
